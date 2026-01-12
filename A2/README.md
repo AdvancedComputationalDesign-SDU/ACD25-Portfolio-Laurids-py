@@ -11,7 +11,6 @@ search_exclude: false
 
 [View on GitHub]({{ site.github.repository_url }})
 
-![Example Fractal](images/branching.png)
 
 ---
 

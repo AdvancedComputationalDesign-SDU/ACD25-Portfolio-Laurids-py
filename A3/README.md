@@ -11,7 +11,6 @@ search_exclude: false
 
 [View on GitHub]({{ site.github.repository_url }})
 
-![Example Canopy](images/canopy.jpg)
 
 ## Table of Contents
 - [Repository-Structure](#repository-structure)

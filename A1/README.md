@@ -11,8 +11,6 @@ search_exclude: false
 
 [View on GitHub]({{ site.github.repository_url }})
 
-![Example Image](images/perlin_moire.png)
-
 ---
 
 ## Repository structure
@@ -29,8 +27,6 @@ A1/
 ---
 
 # Documentation
-
-The assignment write-up is given below. 
 
 ## Table of Contents
 
