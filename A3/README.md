@@ -13,13 +13,13 @@ search_exclude: false
 
 
 ## Table of Contents
+
 - [Pseudo-Code](#pseudo-code)
 - [Technical Explanation](#technical-explanation)
 - [Design Variations](#design-variations)
 - [Challenges and Solutions](#challenges-and-solutions)
 - [References](#references)
 - [AI Acknowledgments](#ai-acknowledgments)
-
 
 ---
 
@@ -446,11 +446,11 @@ In the code, I have focused on the surface tessellation and less on the branchin
 
 | Design | amplitude | frequency | phase | divU | divV | rec_depth | br_length | len_reduct | n_branches | seed | Algorithm Notes |
 |-------:|----------:|----------:|------:|-----:|-----:|----------:|----------:|-----------:|-----------:|-----:| ---------------:|
-| A      | 1          |     1.2      |    0.7   |   24   |   24   |      3     |      5     |      0.8      |      3      |   28   |         quad        |  
-| B      |      1     |     1.5      |   1.0    |   14   |   14   |      4     |      6     |      0.9      |      4      |   29   |        tri         |
-| C      |     0.84      |     2.5      |   0    |   60   |   40   |     3      |     5      |      1.2      |       3     |   60   |        quad         |
+| A      | 1          |     1.2      |    0.7   |   24   |   24   |      3     |      5     |      0.8      |      3      |   28   |         quad/att        |  
+| B      |      1     |     1.5      |   1.0    |   14   |   14   |      4     |      6     |      0.9      |      4      |   29   |        tri/att         |
+| C      |     0.84      |     2.5      |   0    |   60   |   40   |     3      |     5      |      1.2      |       3     |   60   |        quad/z         |
 
-Note: The column header "Algorithm Notes" explains whether a triangular or quad mesh was used. Changing the GH boolean component controls this.
+Note: The column header "Algorithm Notes" explains whether a triangular or quad mesh was used and whether the branches tend toward an attractor point or simply upwards in global z-direction. Changing the GH boolean components controls this.
 
 
 1. **Variation A: `Var_A_Wireframe`and `Var_A_Shaded`**

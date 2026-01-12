@@ -155,9 +155,12 @@ def generate_supports(roots, depth, length, reduction, branches, seed, canopy_su
     def grow(pt,d,L): # Recursive growth function
         if d<=0: return # Stops growth if recursion depth is less than or equal to zero
         for _ in range(branches):
-            cp = rs.SurfaceClosestPoint(canopy_surf,pt) # UV parameters of closest point on canopy
-            tgt = rs.EvaluateSurface(canopy_surf,cp[0],cp[1]) # 3D coordinate of cp
-            base_dir = rs.VectorUnitize(rs.VectorCreate(tgt,pt)) # Normalized vector pointing toward the canopy
+            if use_attractor: # Branching supports tend toward attractor point
+                cp = rs.SurfaceClosestPoint(canopy_surf,pt) # UV parameters of closest point on canopy
+                tgt = rs.EvaluateSurface(canopy_surf,cp[0],cp[1]) # 3D coordinate of cp
+                base_dir = rs.VectorUnitize(rs.VectorCreate(tgt,pt)) # Normalized vector pointing toward the canopy
+            else:
+                base_dir = (0,0,1) # Branching supports tend in z-direction
             jitter = (random.uniform(-0.3,0.3),random.uniform(-0.3,0.3),random.uniform(0,0.3))
             direction = rs.VectorUnitize(rs.VectorAdd(base_dir,jitter))
             end = rs.PointAdd(pt, rs.VectorScale(direction,L)) # Adds end-point

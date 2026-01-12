@@ -22,6 +22,7 @@ search_exclude: false
 - [AI Acknowledgments](#ai-acknowledgments)
 - [References](#references)
 
+---
 
 ## Project Overview
 
@@ -356,15 +357,18 @@ The images clearly show that the agents succesfully spawn on the surface.
 
 **Variation A**
 ![Variation A](images/Variation_A.png)
+![Variation A Delaunay](images/Variation_A_Delaunay.png)
 
 **Variation B**
 ![Variation B](images/Variation_B.png)
+![Variation B Delaunay](images/Variation_B_Delaunay.png)
 
 **Variation C**
 ![Variation C](images/Variation_C.png)
+![Variation C Delaunay](images/Variation_C_Delaunay.png)
 
 
-For reference, a wireframe rendering of variation C is pasted below:
+For reference, a shaded rendering of variation C is pasted below:
 
 ![Variation C - shaded](images/Variation_C_shaded.png)
 
@@ -495,3 +499,4 @@ Sometimes ChatGPT provided answers I simply did not understand, and I chose not 
 
 - **YouTube:**
   - Various tutorials that provided absolutely no help at all 
+  
