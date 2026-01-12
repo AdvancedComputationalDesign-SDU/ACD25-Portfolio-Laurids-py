@@ -16,7 +16,6 @@ search_exclude: false
 
 ## Table of Contents
 
-- [Repository structure](#Repository-structure)
 - [Pseudo-Code](#pseudo-code)
 - [Technical Explanation](#technical-explanation)
 - [Geometric Influences](#geometric-influences)
@@ -26,18 +25,6 @@ search_exclude: false
 - [Challenges and Solutions](#challenges-and-solutions)
 - [References](#references)
 
-
-## Repository structure
-
-```
-A2/
-├── index.md             
-├── README.md                  
-├── BRIEF.md                    
-├── fractal_generator.py  
-└── images/          
-    ├── Generated images
-```
 ---
 
 

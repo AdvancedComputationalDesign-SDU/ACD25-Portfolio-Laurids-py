@@ -14,7 +14,6 @@ search_exclude: false
 
 ## Table of Contents
 
-- [Repository Structure](#repository-structure)
 - [Project Overview](#project-overview)
 - [Pseudo-Code](#pseudo-code)
 - [Technical Explanation](#technical-explanation)
@@ -23,24 +22,6 @@ search_exclude: false
 - [AI Acknowledgments](#ai-acknowledgments)
 - [References](#references)
 
-
----
-
-## Repository Structure
-
-```
-A4/
-├── index.md
-├── README.md
-├── BRIEF.md
-├── agent_panelization.gh
-├── surface_generator.py
-├── agent_builder.py
-├── agent_simulator.py
-└── images/
-    └── generated images
-```
----
 
 ## Project Overview
 

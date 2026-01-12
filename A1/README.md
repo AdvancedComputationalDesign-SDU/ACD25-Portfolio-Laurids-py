@@ -13,19 +13,6 @@ search_exclude: false
 
 ---
 
-## Repository structure
-
-```
-A1/
-├── index.md                    
-├── README.md                   
-├── BRIEF.md                    
-├── pattern_generator.py        
-└── images/                     
-    |── Generated images       
-```
----
-
 # Documentation
 
 ## Table of Contents

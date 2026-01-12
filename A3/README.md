@@ -13,7 +13,6 @@ search_exclude: false
 
 
 ## Table of Contents
-- [Repository-Structure](#repository-structure)
 - [Pseudo-Code](#pseudo-code)
 - [Technical Explanation](#technical-explanation)
 - [Design Variations](#design-variations)
@@ -21,21 +20,6 @@ search_exclude: false
 - [References](#references)
 - [AI Acknowledgments](#ai-acknowledgments)
 
-
----
-
-## Repository Structure
-
-```
-A3/
-├── index.md 
-├── README.md 
-├── BRIEF.md 
-├── parametric_canopy.py
-├── parametric_canopy.gh
-└── images/
-    └── generated images
-```
 
 ---
 
