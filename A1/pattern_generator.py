@@ -1,57 +1,83 @@
-# Assignment 1: NumPy Array Manipulation for 2D Pattern Generation
+# -------- Assignment 1: 2D Pattern Generation with NumPy --------
 
-# Instructions:
-# - Write your code to generate patterns using NumPy.
-# - Use comments to explain your logic and the methods you're using.
-# - Feel free to be creative and explore different techniques.
-
+# Import of libraries
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Initialize your canvas (e.g., a 2D array filled with zeros)
-# You can adjust the size as needed
-canvas_height = 100  # Modify as desired
-canvas_width = 100   # Modify as desired
-canvas = np.zeros((canvas_height, canvas_width))
+# Canvas resolution kept small to emphasize structure
+h, w = 100, 100
 
-# Apply array manipulations to create a pattern
-# Suggestions:
-# - Use slicing and indexing to create stripes or checkerboards
-# - Use mathematical functions to create gradients
-# - Combine multiple patterns
+# Coordinate grid for vectorized spatial operations
+rows = np.arange(h)
+cols = np.arange(w)
+X, Y = np.meshgrid(cols, rows)
 
-# Example (you can modify or remove this):
-# Create horizontal stripes
-# for i in range(0, canvas_height, 20):
-#     canvas[i:i+10, :] = 255  # Assign a value to create a stripe
+# Center point defines radial symmetry
+cy, cx = h // 2, w // 2
 
-# Introduce randomness to add variability
-# Suggestions:
-# - Use np.random functions to add noise
-# - Randomly change pixel values within certain regions
+# Distance from center used to create a smooth base pattern
+dist = np.sqrt((X - cx)**2 + (Y - cy)**2)
 
-# Example:
-# noise = np.random.randint(0, 50, (canvas_height, canvas_width))
-# canvas = canvas + noise
+# Add a small sine variation to make the gradient more visually appealing
+gradient = np.sqrt(dist) / 6
+gradient += 0.25 * np.sin(dist * 0.4)
 
-# Work with RGB channels
-# Convert your 2D canvas to a 3D array for RGB representation
-# Assign different colors to different parts of your pattern
+# Hard outer border frames the composition
+gradient[0, :] = gradient.min()
+gradient[-1, :] = gradient.min()
+gradient[:, 0] = gradient.min()
+gradient[:, -1] = gradient.min()
 
-# Example:
-# canvas_rgb = np.stack((canvas, canvas, canvas), axis=2)
+# Center rectangle
+gradient[cy-5, cx-5:cx+5] = gradient.max()
+gradient[cy+5, cx-5:cx+5] = gradient.max()
+gradient[cy-5:cy+6, cx-5] = gradient.max()
+gradient[cy-5:cy+6, cx+5] = gradient.max()
 
-# Assign colors
-# canvas_rgb[:, :, 0] = 255  # Modify the red channel
-# canvas_rgb[:, :, 1] = canvas_rgb[:, :, 1] * 0.5  # Modify the green channel
+# Normalize for stable color mapping
+canvas_n = (gradient - gradient.min()) / (gradient.max() - gradient.min())
 
-# Ensure your array values are within the valid range (0-255)
-# canvas_rgb = np.clip(canvas_rgb, 0, 255)
+# Adjust brightness to make transitions smoother
+canvas_n = canvas_n ** 0.85
 
-# Visualize and save your image
-# plt.imshow(canvas_rgb.astype(np.uint8))
-# plt.axis('off')  # Hide axis
-# plt.show()
+# Minimal noise adds texture without visual clutter
+noise = np.random.uniform(-0.01, 0.01, (h, w))
+canvas_n += noise * (dist / dist.max())
 
-# Save the image to the images folder
-# plt.savefig('images/pattern_example.png', bbox_inches='tight', pad_inches=0)
+# Limited three-color palette to enforce visual restraint
+c1 = np.array([0.95, 0.85, 0.20])   # warm yellow
+c2 = np.array([0.20, 0.70, 0.85])   # cyan
+c3 = np.array([0.55, 0.20, 0.75])   # purple
+
+# Gradually blend between the three colors
+w1 = np.clip(1 - canvas_n * 2, 0, 1)
+w2 = np.clip(1 - np.abs(canvas_n - 0.5) * 2, 0, 1)
+w3 = np.clip(canvas_n * 2 - 1, 0, 1)
+
+# Note: The above lines smoothly distribute each pixel’s value between three colors based on its intensity
+
+# Final color image from weighted palette blending
+canvas_rgb = (
+    w1[..., None] * c1 +
+    w2[..., None] * c2 +
+    w3[..., None] * c3
+)
+
+# Attractors add subtle local variation without overpowering structure
+attractors = np.random.randint(0, h, size=(4, 2))
+R = 15
+
+for ax, ay in attractors:
+    d = np.sqrt((X - ax)**2 + (Y - ay)**2) # distance function
+    mask = d < R # limits radius of influence
+    shift = 0.1 * np.sin(d * 0.5) # creates a smooth brightness variation based on distance from the attractor
+    canvas_rgb[mask] += shift[mask, None] # application of variation based on distance from attractor
+
+# Clamp values to valid RGB range
+canvas_rgb = np.clip(canvas_rgb, 0, 1)
+
+# Display result
+plt.imshow(canvas_rgb)
+plt.axis('off')
+plt.title("Unique pattern")
+plt.show()

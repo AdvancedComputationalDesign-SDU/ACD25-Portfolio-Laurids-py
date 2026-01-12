@@ -1,55 +1,64 @@
-"""
-Assignment 4: Agent-Based Model for Surface Panelization
-Author: Your Name
+# ---------------------------------------------------------------------------
+# Component 3: Agent Simulator / Tick (Persistent)
+# ---------------------------------------------------------------------------
+# Purpose: Advances the simulation for all agents created in Component 2.
+# Inputs:
+#   - agents : list of Agent instances (from Component 2)
+#   - tick   : trigger to advance simulation
+# Outputs:
+#   - P : points representing agent positions
+#   - V : lines representing agent velocities
+# ---------------------------------------------------------------------------
 
-Agent Simulator Template
-
-Description:
-This file defines the structural outline for stepping and visualizing
-agents within Grasshopper. No simulation logic is implemented. All behavior
-(update, responding to signals, movement, etc.) must be
-implemented inside your Agent class in `agent_builder.py`.
-
-Note: This script is intended to be used within Grasshopper's Python
-scripting component.
-"""
-
-# -----------------------------------------------------------------------------
-# Imports (extend as needed)
-# -----------------------------------------------------------------------------
 import rhinoscriptsyntax as rs
-import numpy as np
+import scriptcontext as sc
 
-# -----------------------------------------------------------------------------
-# Retrieve agents from upstream Grasshopper component
-# -----------------------------------------------------------------------------
-# Expected pattern (example):
-# agents = x.agents  # where `x` is a stateful component instance
-# Replace `x` and the attribute name with whatever your GH setup uses.
+# ---------------------------------------------------------------------------
+# Use scriptcontext.sticky for persistent storage
+# ---------------------------------------------------------------------------
+if "agents_storage" not in sc.sticky: # Checks whether component has already stored agents from a previous solution
+    if agents is None:
+        sc.sticky["agents_storage"] = []  # Empty list is created if nothing is connected
+    else:
+        sc.sticky["agents_storage"] = agents if isinstance(agents, list) else [agents] # Stores agents in list
+        # Note: If a list already exists, the agents are stored directly. If only a single agent exist, it is wrapped in a list. 
+else:
+    # If new agents are connected, update storage
+    if agents is not None: # Only overwrite stored agents if a new agent input is provided
+        sc.sticky["agents_storage"] = agents if isinstance(agents, list) else [agents] # Preserves agents if nothing changes upstream
 
-agents = x.agents # access agents from the agents_builder component
+# Retrieve stored agents
+agents_storage = sc.sticky["agents_storage"]
 
-# -----------------------------------------------------------------------------
-# Step simulation (delegated to Agent methods)
-# -----------------------------------------------------------------------------
-# Suggested loop structure:
-if agents is not None:
-    for agent in agents:
-        agent.update(agents)
+# ---------------------------------------------------------------------------
+# STEP SIMULATION: update each agent if tick is pressed
+# ---------------------------------------------------------------------------
+if tick:
+    for agent in agents_storage:
+        # Each agent has heightmap, U_grid, V_grid stored internally
+        agent.update()  # Performs sense -> decide -> move
 
-# -----------------------------------------------------------------------------
-# Visualization placeholders (Rhino + NumPy-friendly)
-# -----------------------------------------------------------------------------
-# Minimal outputs:
-# - Points representing agent positions
-# - Vectors, polylines, trails, or any custom debug geometry
+# ---------------------------------------------------------------------------
+# VISUALIZATION
+# ---------------------------------------------------------------------------
+P = []  # Points representing agent positions
+V = []  # Lines representing velocity vectors
 
-P = []  # list of position points (e.g., rs.AddPoint(...))
-V = []  # list of velocity vectors or other debug geometry
-
-# Example geometry generation (uncomment and adapt):
-for agent in agents:
+for agent in agents_storage:
+    # Add point at agent's current position
     P.append(rs.AddPoint(agent.position[0], agent.position[1], agent.position[2]))
-    # create a line or vector visualization from pos in direction vel
-    end = agent.position + agent.velocity
-    V.append(rs.AddLine(rs.coerce3dpoint(pos), rs.coerce3dpoint(end)))
+    
+    # Compute end point for velocity vector
+    end_point = (
+        agent.position[0] + agent.velocity[0],
+        agent.position[1] + agent.velocity[1],
+        agent.position[2] + agent.velocity[2]
+    )
+    # Add line representing velocity vector
+    V.append(rs.AddLine(agent.position, end_point))
+
+# ---------------------------------------------------------------------------
+# OUTPUTS
+# ---------------------------------------------------------------------------
+# P : list of points representing agent positions
+# V : list of lines representing agent velocities
